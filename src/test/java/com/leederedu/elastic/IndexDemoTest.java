@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leederedu.elastic.entity.Info;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.Client;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,11 +19,13 @@ public class IndexDemoTest {
 
     public static ObjectMapper objectMapper = null;
     public static String INDEX = "leederedu";
+    private static Client client;
 
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
         objectMapper = new ObjectMapper();
         ESClient.initializeSettings();
+        client = ESClient.getClient();
     }
 
     @AfterClass
@@ -32,9 +35,9 @@ public class IndexDemoTest {
 
     @Test
     public void IndexResponseTest() throws JsonProcessingException {
-        Info info = new Info().setId(1001).setName("测试").setContext("测试文章内容").setSortNum(2000).setUrl("http://192.168.10.124");
-
-        IndexResponse response = ESClient.getClient()
+//        Info info = new Info().setId(1102).setName("Hello, World").setContext("珠江新城").setSortNum(3001).setUrl("http://192.168.19.126");
+        Info info = new Info().setId(1103).setName("节日").setContext("广州国际灯光节").setSortNum(3001).setUrl("http://192.168.19.126");
+        IndexResponse response = client
                 .prepareIndex(INDEX, info.getClass().getSimpleName(), info.getId() + "")
                 .setSource(objectMapper.writeValueAsBytes(info))
                 .get();
