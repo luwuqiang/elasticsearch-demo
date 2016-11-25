@@ -30,13 +30,27 @@ public class DeleteDemoTest {
         ESClient.closeTransportClient();
     }
 
+    /**
+     * 通过文档ID来删除文档
+     */
     @Test
-    public void delete() {
+    public void deleteById() {
+
         String id = "1001";
         DeleteResponse response = ESClient.getClient().prepareDelete(INDEX, Info.class.getSimpleName(), id)
                 .get();
 
         assertEquals(false, response.isFound());
+    }
+
+    /**
+     * 通过脚本删除文档
+     */
+    @Test
+    public void deleteByQuery(){
+//        QueryBuilder query = matchQuery("title","title");
+//        ESClient.getClient().prepare
+
     }
 
 }

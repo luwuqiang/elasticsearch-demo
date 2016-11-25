@@ -3,20 +3,26 @@ package com.leederedu.elastic;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.admin.indices.settings.get.GetSettingsResponse;
 import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.ClusterAdminClient;
+import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.cluster.health.ClusterIndexHealth;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Map;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**
  * Created by liuwuqiang on 2016/11/23.
@@ -45,13 +51,14 @@ public class AdministrationDemoTest {
     }
 
     // =================== index admin begin===========================//
+
     /**
      * 创建索引
      */
     @Test
     public void createIndex() {
         //使用默认配置创建新索引
-        client.admin().indices().prepareCreate("twitter").get();
+        client.admin().indices().prepareCreate("twitter").execute().actionGet();
 
         //使用指定配置创建新索引
         client.admin().indices().prepareCreate("twitter2")
@@ -60,6 +67,30 @@ public class AdministrationDemoTest {
                         .put("index.number_of_replicas", 2)
                 )
                 .get();
+    }
+
+    @Test
+    public void putMapping() throws IOException {
+        //指定索引的类型映射
+        String type = "product";
+        XContentBuilder mapping = jsonBuilder()
+                .startObject()
+                .startObject(type)
+                .startObject("properties")
+                .startObject("title").field("type", "string").field("store", "yes").endObject()
+                .startObject("description").field("type", "string").field("index", "not_analyzed").endObject()
+                .startObject("price").field("type", "double").endObject()
+                .startObject("onSale").field("type", "boolean").endObject()
+                .startObject("type").field("type", "integer").endObject()
+                .startObject("updateDate").field("type", "date").field("format","yyyy-MM-dd HH:mm:ss").endObject()
+                .endObject()
+                .endObject()
+                .endObject();
+
+        PutMappingRequest mappingRequest = Requests.putMappingRequest(INDEX)
+                .type(type).source(mapping);
+
+        client.admin().indices().putMapping(mappingRequest).actionGet();
     }
 
     /**

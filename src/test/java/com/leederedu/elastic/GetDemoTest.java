@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 /**
+ * 搜索数据
  * Created by liuwuqiang on 2016/11/22.
  */
 public class GetDemoTest {
@@ -23,6 +24,7 @@ public class GetDemoTest {
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
         objectMapper = new ObjectMapper();
+//        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
         ESClient.initializeSettings();
     }
 

@@ -115,4 +115,7 @@ public abstract class ESClient extends LuceneTestCase {
         }
     }
 
+    public static void setClusterAddresses(String clusterAddresses) {
+        ESClient.clusterAddresses = clusterAddresses;
+    }
 }

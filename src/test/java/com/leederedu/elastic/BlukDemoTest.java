@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 批量提交，支持批量添加\删除以及更新
  * https://www.elastic.co/guide/en/elasticsearch/client/java-api/2.3/java-docs-bulk-processor.html
  * Created by liuwuqiang on 2016/11/22.
  */
@@ -61,6 +62,7 @@ public class BlukDemoTest {
 //                        .startObject()
 //                        .field("name", "测试bulkRequest")
 //                        .endObject()));
+
 
         BulkResponse bulkResponse = bulkRequest.get();
         if (bulkResponse.hasFailures()) {
