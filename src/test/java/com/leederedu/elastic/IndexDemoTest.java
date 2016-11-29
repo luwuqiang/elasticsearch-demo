@@ -31,7 +31,7 @@ public class IndexDemoTest {
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
         objectMapper = new ObjectMapper();
-//        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
+        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
         ESClient.initializeSettings();
         client = ESClient.getClient();
     }

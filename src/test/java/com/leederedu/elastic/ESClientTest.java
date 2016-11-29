@@ -14,6 +14,7 @@ public class ESClientTest {
 
     private static String clusterName = "elasticsearch";
     public static String clusterAddresses = "192.168.135.134:9300,192.168.135.134:9302,192.168.135.134:9303";
+//    public static String clusterAddresses = "192.168.135.1:9300";
     /**
      * ES下两种客户端对比：
      * 1、TransportClient：轻量级的Client，使用Netty线程池，Socket连接到ES集群。本身不加入到集群，只作为请求的处理。

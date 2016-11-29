@@ -36,6 +36,7 @@ public class AdministrationDemoTest {
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
         objectMapper = new ObjectMapper();
+        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
         ESClient.initializeSettings();
         client = ESClient.getClient();
     }
@@ -63,12 +64,36 @@ public class AdministrationDemoTest {
         //使用指定配置创建新索引
         client.admin().indices().prepareCreate("twitter2")
                 .setSettings(Settings.builder()
-                        .put("index.number_of_shards", 3)
-                        .put("index.number_of_replicas", 2)
+                        .put("index.number_of_shards", 3) //twitter2已经存在时，不能修改分片
+                        .put("index.number_of_replicas", 2)//不存在索引twitter2时可以指定副本和分片，否则只能修改副本
                 )
                 .get();
     }
 
+    /**
+     * "properties": {
+     * "content": {
+     * "type": "string",
+     * "store": "no",
+     * "term_vector": "with_positions_offsets",
+     * "analyzer": "ik_max_word",
+     * "search_analyzer": "ik_max_word",
+     * "include_in_all": "true",
+     * "boost": 8
+     * }
+     * }
+     * properties中定义了特定字段的分析方式。在上面的例子中，仅仅设置了content的分析方法。
+     * <p>
+     * type，字段的类型为string，只有string类型才涉及到分词，像是数字之类的是不需要分词的。
+     * store，定义字段的存储方式，no代表不单独存储，查询的时候会从_source中解析。当你频繁的针对某个字段查询时，可以考虑设置成true。
+     * term_vector，定义了词的存储方式，with_position_offsets，意思是存储词语的偏移位置，在结果高亮的时候有用。
+     * analyzer，定义了索引时的分词方法
+     * search_analyzer，定义了搜索时的分词方法
+     * include_in_all，定义了是否包含在_all字段中
+     * boost，是跟计算分值相关的。
+     *
+     * @throws IOException
+     */
     @Test
     public void putMapping() throws IOException {
         //指定索引的类型映射
@@ -77,20 +102,20 @@ public class AdministrationDemoTest {
                 .startObject()
                 .startObject(type)
                 .startObject("properties")
-                .startObject("title").field("type", "string").field("store", "yes").endObject()
-                .startObject("description").field("type", "string").field("index", "not_analyzed").endObject()
+                .startObject("title").field("type", "string").field("store", "yes").field("analyzer", "ik").field("search_analyzer", "ik_smart").endObject()
+                .startObject("description").field("type", "string").field("analyzer", "ik").field("search_analyzer", "ik_smart").endObject()
                 .startObject("price").field("type", "double").endObject()
                 .startObject("onSale").field("type", "boolean").endObject()
                 .startObject("type").field("type", "integer").endObject()
-                .startObject("updateDate").field("type", "date").field("format","yyyy-MM-dd HH:mm:ss").endObject()
+                .startObject("updateDate").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss").endObject()
                 .endObject()
                 .endObject()
                 .endObject();
 
         PutMappingRequest mappingRequest = Requests.putMappingRequest(INDEX)
                 .type(type).source(mapping);
-
         client.admin().indices().putMapping(mappingRequest).actionGet();
+
     }
 
     /**

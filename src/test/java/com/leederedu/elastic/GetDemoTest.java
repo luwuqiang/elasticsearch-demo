@@ -24,7 +24,7 @@ public class GetDemoTest {
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
         objectMapper = new ObjectMapper();
-//        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
+        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
         ESClient.initializeSettings();
     }
 
@@ -34,7 +34,7 @@ public class GetDemoTest {
     }
 
     @Test
-    public void getDatatest() throws IOException {
+    public void getDataTest() throws IOException {
         GetResponse response = ESClient.getClient()
                 .prepareGet(INDEX, Info.class.getSimpleName(), "1003")
                 .setOperationThreaded(false)

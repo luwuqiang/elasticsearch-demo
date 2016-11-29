@@ -25,6 +25,7 @@ public class UpdateDemoTest {
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
         objectMapper = new ObjectMapper();
+        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
         ESClient.initializeSettings();
     }
 
@@ -33,22 +34,34 @@ public class UpdateDemoTest {
         ESClient.closeTransportClient();
     }
 
+    /**
+     * id不存在是将抛出异常，不会自动新建该条数据，域(field) 不存在时会新增一个新域
+     *
+     * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void update() throws IOException, ExecutionException, InterruptedException {
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.index(INDEX);
         updateRequest.type(Info.class.getSimpleName());
-        updateRequest.id("1001");
+        updateRequest.id("1002");
 
         updateRequest.doc(jsonBuilder()
                 .startObject()
-                .field("name2", "测试")
+                .field("name3", "测试2")
                 .endObject());
         ESClient.getClient().update(updateRequest).get();
-
-        //域(field) 不存在时会新增一个新域
     }
 
+    /**
+     * id不存在是将抛出异常，不会自动新建该条数据
+     *
+     * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void usePrepareUpdate() throws IOException, ExecutionException, InterruptedException {
 
