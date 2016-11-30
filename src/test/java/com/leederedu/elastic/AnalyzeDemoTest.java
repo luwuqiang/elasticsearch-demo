@@ -1,22 +1,17 @@
 package com.leederedu.elastic;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeAction;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequestBuilder;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -26,24 +21,8 @@ import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 /**
  * Created by liuwuqiang on 2016/11/28.
  */
-public class AnalyzeDemoTest {
+public class AnalyzeDemoTest extends AbstractTest{
 
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
-    private static Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
-        ESClient.initializeSettings();
-        client = ESClient.getClient();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
 
     @Test
     public void test() {

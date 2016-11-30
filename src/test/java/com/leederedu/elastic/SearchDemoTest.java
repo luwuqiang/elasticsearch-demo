@@ -1,12 +1,10 @@
 package com.leederedu.elastic;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leederedu.elastic.entity.Info;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -17,36 +15,16 @@ import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInter
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.search.sort.SortParseElement;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.net.UnknownHostException;
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 /**
  * Created by liuwuqiang on 2016/11/22.
  */
-public class SearchDemoTest {
+public class SearchDemoTest extends AbstractTest {
 
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
     public static String INDEX_2 = "test_index";
-    private static Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
-        ESClient.initializeSettings();
-        client = ESClient.getClient();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
 
     @Test
     public void search() {

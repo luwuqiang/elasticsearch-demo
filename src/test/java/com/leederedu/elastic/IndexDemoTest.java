@@ -2,17 +2,12 @@ package com.leederedu.elastic;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leederedu.elastic.entity.Info;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Date;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
@@ -22,24 +17,7 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
  * 索引数据
  * Created by liuwuqiang on 2016/11/22.
  */
-public class IndexDemoTest {
-
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
-    private static Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
-        ESClient.initializeSettings();
-        client = ESClient.getClient();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
+public class IndexDemoTest extends AbstractTest {
 
     @Test
     public void indexTest() throws JsonProcessingException {
@@ -65,7 +43,7 @@ public class IndexDemoTest {
                 .field("type", 1)
                 .field("createDate", new Date())
                 .endObject();
-        IndexResponse response =  client.prepareIndex(INDEX, "product")
+        IndexResponse response = client.prepareIndex(INDEX, "product")
                 .setId("1") //需要指定id，否则会生成一个随机序列号
                 .setSource(doc).execute().actionGet();
         System.out.println(response.toString());

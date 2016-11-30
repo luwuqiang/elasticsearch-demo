@@ -1,37 +1,18 @@
 package com.leederedu.elastic;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leederedu.elastic.entity.Info;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetResponse;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 /**
  * 搜索数据
  * Created by liuwuqiang on 2016/11/22.
  */
-public class GetDemoTest {
-
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
-        ESClient.initializeSettings();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
+public class GetDemoTest extends AbstractTest {
 
     @Test
     public void getDataTest() throws IOException {

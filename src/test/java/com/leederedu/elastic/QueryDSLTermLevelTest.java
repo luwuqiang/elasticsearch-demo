@@ -1,15 +1,9 @@
 package com.leederedu.elastic;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.net.UnknownHostException;
 
 import static org.elasticsearch.index.query.QueryBuilders.existsQuery;
 import static org.elasticsearch.index.query.QueryBuilders.fuzzyQuery;
@@ -26,23 +20,7 @@ import static org.elasticsearch.index.query.QueryBuilders.wildcardQuery;
 /**
  * Created by liuwuqiang on 2016/11/23.
  */
-public class QueryDSLTermLevelTest {
-
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
-    private static Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.initializeSettings();
-        client = ESClient.getClient();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
+public class QueryDSLTermLevelTest extends AbstractTest {
 
     /**
      * Find documents which contain the exact term specified in the field specified.

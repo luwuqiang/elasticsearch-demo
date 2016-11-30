@@ -47,7 +47,6 @@ public abstract class ESClient extends LuceneTestCase {
     private static final AtomicInteger counter = new AtomicInteger();
     private static Client client;
     private static String clusterAddresses;
-//    protected String index;
 
     private static Client startClient(TransportAddress... transportAddresses) {
         Settings clientSettings = Settings.settingsBuilder()

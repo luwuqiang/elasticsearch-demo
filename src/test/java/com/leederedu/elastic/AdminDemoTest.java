@@ -1,12 +1,10 @@
 package com.leederedu.elastic;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.admin.indices.settings.get.GetSettingsResponse;
 import org.elasticsearch.client.AdminClient;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.health.ClusterHealthStatus;
@@ -14,12 +12,9 @@ import org.elasticsearch.cluster.health.ClusterIndexHealth;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Map;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
@@ -27,24 +22,7 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 /**
  * Created by liuwuqiang on 2016/11/23.
  */
-public class AdministrationDemoTest {
-
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
-    private static Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.setClusterAddresses(ESClientTest.clusterAddresses);
-        ESClient.initializeSettings();
-        client = ESClient.getClient();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
+public class AdminDemoTest extends AbstractTest{
 
     @Test
     public void getAdminClient() {

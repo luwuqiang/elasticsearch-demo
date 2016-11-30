@@ -1,0 +1,163 @@
+# ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please see the documentation for further information on configuration options:
+# <http://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration.html>
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+cluster.name: leederedu
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-4
+#
+# Add custom attributes to the node:
+#
+# node.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+path.data: D:/lucene/data/
+#
+# Path to log files:
+#
+path.logs: D:/lucene/logs/
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+# bootstrap.mlockall: true
+#
+# Make sure that the `ES_HEAP_SIZE` environment variable is set to about half the memory
+# available on the system and that the owner of the process is allowed to use this limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+network.host: 192.168.135.1
+#
+# Set a custom port for HTTP:
+#
+http.port: 9204
+#
+#
+transport.tcp.port: 9304
+#
+# For more information, see the documentation at:
+# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html>
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+discovery.zen.ping.unicast.hosts: ["es-node-1:9300", "es-node-2:9302", "es-node-3:9303"]
+#
+# Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
+#
+# discovery.zen.minimum_master_nodes: 3
+#
+# For more information, see the documentation at:
+# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html>
+#
+# ---------------------------------- Gateway -----------------------------------
+#
+# Block initial recovery after a full cluster restart until N nodes are started:
+#
+# gateway.recover_after_nodes: 3
+#
+# For more information, see the documentation at:
+# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html>
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Disable starting multiple nodes on a single system:
+#
+# node.max_local_storage_nodes: 1
+#
+# Require explicit names when deleting indices:
+#
+# action.destructive_requires_name: true
+
+# ------------------------------------ Custom Analyze Begin--------------------------------------------
+# <https://www.elastic.co/guide/en/elasticsearch/reference/2.3/analysis-custom-analyzer.html>
+# 以下自定义配置仅供参数
+
+index :
+    analysis :
+        analyzer :
+            myAnalyzer2 :
+                type : custom
+                tokenizer : myTokenizer1
+                filter : [myTokenFilter1, myTokenFilter2]
+                char_filter : [my_html]
+                position_increment_gap: 256
+            user_name_analyzer :
+                type : custom
+                tokenizer : whitespace
+                filter : pinyin_first_letter_and_full_pinyin_filter
+            ik_pinyin :
+                type : custom
+                tokenizer : ik
+                filter : [pinyin_mcl, word_delimiter]
+        tokenizer :
+            myTokenizer1 :
+                type : standard
+                max_token_length : 900
+            my_pinyin :
+                type : pinyin
+                keep_separate_first_letter : false
+                keep_full_pinyin : true
+                keep_original : true
+                limit_first_letter_length : 16
+                lowercase" : true
+        filter :
+            myTokenFilter1 :
+                type : stop
+                stopwords : [stop1, stop2, stop3, stop4]
+            myTokenFilter2 :
+                type : length
+                min : 0
+                max : 2000
+            pinyin_first_letter_and_full_pinyin_filter :
+                type : pinyin
+                keep_first_letter : true
+                keep_full_pinyin : false
+                keep_none_chinese : true
+                keep_original : false
+                limit_first_letter_length : 16
+                lowercase : true
+                trim_whitespace : true
+                keep_none_chinese_in_first_letter : true
+            pinyin_mcl :
+                type: pinyin
+                first_letter: none
+                keep_full_pinyin: false
+                keep_joined_full_pinyin: true
+                lowercase : true
+                keep_original : true
+                padding_char: " "
+        char_filter :
+              my_html :
+                type : html_strip
+                escaped_tags : [xxx, yyy]
+                read_ahead : 1024
+
+# ------------------------------------ Custom Analyze End--------------------------------------------

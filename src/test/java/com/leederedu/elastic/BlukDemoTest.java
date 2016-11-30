@@ -1,7 +1,6 @@
 package com.leederedu.elastic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leederedu.elastic.entity.Info;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -15,12 +14,9 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.ByteSizeUnit;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,23 +24,7 @@ import java.util.concurrent.TimeUnit;
  * https://www.elastic.co/guide/en/elasticsearch/client/java-api/2.3/java-docs-bulk-processor.html
  * Created by liuwuqiang on 2016/11/22.
  */
-public class BlukDemoTest {
-
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
-    private static Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.initializeSettings();
-        client = ESClient.getClient();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
+public class BlukDemoTest extends AbstractTest{
 
     @Test
     public void bulkDemo() throws IOException {

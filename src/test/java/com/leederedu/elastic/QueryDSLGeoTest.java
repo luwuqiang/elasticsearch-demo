@@ -1,8 +1,6 @@
 package com.leederedu.elastic;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.geo.ShapeRelation;
@@ -10,11 +8,7 @@ import org.elasticsearch.common.geo.builders.ShapeBuilder;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.net.UnknownHostException;
 
 import static org.elasticsearch.index.query.QueryBuilders.geoDistanceQuery;
 import static org.elasticsearch.index.query.QueryBuilders.geoDistanceRangeQuery;
@@ -25,23 +19,7 @@ import static org.elasticsearch.index.query.QueryBuilders.geoShapeQuery;
 /**
  * Created by liuwuqiang on 2016/11/23.
  */
-public class QueryDSLGeoTest {
-
-    public static ObjectMapper objectMapper = null;
-    public static String INDEX = "leederedu";
-    private static Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        objectMapper = new ObjectMapper();
-        ESClient.initializeSettings();
-        client = ESClient.getClient();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        ESClient.closeTransportClient();
-    }
+public class QueryDSLGeoTest extends AbstractTest {
 
     /**
      * Find document with geo-shapes which either intersect, are contained by, or do not intersect with the specified geo-shape.
