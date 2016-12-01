@@ -28,7 +28,6 @@ import org.elasticsearch.common.logging.ESLoggerFactory;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.node.internal.InternalSettingsPreparer;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -47,13 +46,16 @@ public abstract class ESClient extends LuceneTestCase {
     private static final AtomicInteger counter = new AtomicInteger();
     private static Client client;
     private static String clusterAddresses;
+    public static String clusterName = "leederedu";
 
     private static Client startClient(TransportAddress... transportAddresses) {
+//        Settings clientSettings = Settings.settingsBuilder()
+//                .put("name", "qa_smoke_client_" + counter.getAndIncrement())
+//                .put(InternalSettingsPreparer.IGNORE_SYSTEM_PROPERTIES_SETTING, true) // prevents any settings to be replaced by system properties.
+//                .put("client.transport.ignore_cluster_name", true)
+//                .put("node.mode", "network").build(); // we require network here!
         Settings clientSettings = Settings.settingsBuilder()
-                .put("name", "qa_smoke_client_" + counter.getAndIncrement())
-                .put(InternalSettingsPreparer.IGNORE_SYSTEM_PROPERTIES_SETTING, true) // prevents any settings to be replaced by system properties.
-                .put("client.transport.ignore_cluster_name", true)
-                .put("node.mode", "network").build(); // we require network here!
+                .put("cluster.name", clusterName).build();
 
         TransportClient.Builder transportClientBuilder = TransportClient.builder().settings(clientSettings);
         TransportClient client = transportClientBuilder.build().addTransportAddresses(transportAddresses);
